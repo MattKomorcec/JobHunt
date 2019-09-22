@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model List<Web.Models.Job>
+
+@{
+    ViewData["Title"] = "All Jobs";
+}
+
+<div class="text-center">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        if (Model.Count == 0)
+        {
+            <h1 class="display-4">You have no jobs yet!</h1>
+            <hr />
+        }
+        else
+        {
+            <h1 class="display-4">Jobs you added so far</h1>
+            <hr />
+
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Company</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Language</th>
+                        <th scope="col">Salary</th>
+                        <th scope="col">Date applied</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var job in Model)
+                    {
+                        <tr>
+                            <th scope="row">@job.Company</th>
+                            <td>@job.Position</td>
+                            <td>@job.Language</td>
+                            <td>@job.Salary</td>
+                            <td>@job.DateApplied.ToShortDateString()</td>
+                            <td>@job.Status</td>
+                            <td>
+                                <a asp-controller="Home" asp-action="Edit" asp-route-id="@job.JobId" class="btn btn-info btn-sm">Edit</a>
+                                <a asp-controller="Home" asp-action="Delete" asp-route-id="@job.JobId" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    }
+    else
+    {
+        <h3>You need to be logged in!</h3>
+    }
+
+</div>
