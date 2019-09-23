@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Web.Data;
 using Web.Models;
@@ -12,32 +9,18 @@ namespace Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IJobRepository _jobRepository;
 
-        public HomeController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public HomeController(IJobRepository jobRepository)
         {
-            _dbContext = dbContext;
-            _userManager = userManager;
+            _jobRepository = jobRepository;
         }
 
         public async Task<IActionResult> Index()
         {
-            // Get currently logged in user's id
-            var currentUserId = _userManager.GetUserId(User);
+            var jobs = await _jobRepository.GetAllJobsAsync(User);
 
-            // Find all jobs for that user
-            var jobs = await _dbContext.Jobs
-                .Where(j => j.UserId == currentUserId)
-                .ToListAsync();
-
-            // Simply return the jobs for this user
             return View(jobs);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [HttpGet]
@@ -54,20 +37,7 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            // Get currently logged in user's id
-            var currentUserId = _userManager.GetUserId(User);
-
-            job.UserId = currentUserId;
-
-            // If a user didn't select a date, set it to today's date
-            if (job.DateApplied == null)
-            {
-                job.DateApplied = DateTime.Now;
-            }
-
-            // Add a job and save it to the DB
-            _dbContext.Add<Job>(job);
-            await _dbContext.SaveChangesAsync();
+            await _jobRepository.CreateJobAsync(job, User);
 
             return RedirectToAction("Index");
         }
@@ -80,7 +50,7 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.JobId == id);
+            var job = await _jobRepository.GetJobAsync(id, User);
 
             if (job == null)
             {
@@ -98,29 +68,14 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            // Find a job
-            var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.JobId == editedJob.JobId);
+            var job = await _jobRepository.GetJobAsync(editedJob.JobId, User);
 
-            // This shouldn't happen, but if it somehow does, return a 404
             if (job == null)
             {
                 return NotFound("Somehow this job doesn't exist!");
             }
 
-            // Map all the fields to the existing job
-            job.Company = editedJob.Company;
-            job.Description = editedJob.Description;
-            job.Location = editedJob.Location;
-            job.DateApplied = editedJob.DateApplied;
-            job.Language = editedJob.Language;
-            job.Salary = editedJob.Salary;
-            job.Link = editedJob.Link;
-            job.Position = editedJob.Position;
-            job.Status = editedJob.Status;
-
-            // Save the edited job
-            _dbContext.Jobs.Update(job);
-            await _dbContext.SaveChangesAsync();
+            await _jobRepository.EditJobAsync(editedJob, User);
 
             return RedirectToAction("Index");
         }
@@ -133,7 +88,7 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.JobId == id);
+            var job = await _jobRepository.GetJobAsync(id, User);
 
             if (job == null)
             {
@@ -146,15 +101,14 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Job jobToDelete)
         {
-            var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.JobId == jobToDelete.JobId);
+            var job = await _jobRepository.GetJobAsync(jobToDelete.JobId, User);
 
             if (job == null)
             {
                 return NotFound("Job not found!");
             }
 
-            _dbContext.Jobs.Remove(job);
-            await _dbContext.SaveChangesAsync();
+            await _jobRepository.DeleteJobAsync(jobToDelete, User);
 
             return RedirectToAction("Index");
         }
@@ -163,6 +117,11 @@ namespace Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
         }
     }
 }

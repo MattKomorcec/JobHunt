@@ -49,6 +49,8 @@ namespace Web
                 options.Password.RequiredUniqueChars = 1;
             });
 
+            services.AddScoped<IJobRepository, JobRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
