@@ -1,4 +1,19 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function toggleClass(element, classToToggle) {
+    // If the element contains the class, remove it
+    if (element.classList.contains(classToToggle)) {
+        element.classList.remove(classToToggle)
+    } else { // Otherwise add the class to the element
+        element.classList.add(classToToggle)
+    }
+}
 
-// Write your JavaScript code.
+function main() {
+    const darkSwitch = document.querySelector(".dark-switch")
+
+    darkSwitch.addEventListener("click", function () {
+        toggleClass(darkSwitch, "active")
+        toggleClass(document.body, "dark")
+    })
+}
+
+window.onload = main 

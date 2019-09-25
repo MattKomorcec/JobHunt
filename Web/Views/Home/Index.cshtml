@@ -35,16 +35,33 @@
                 <tbody>
                     @foreach (var job in Model)
                     {
+                        string statusClass = "";
+
+                        switch (job.Status)
+                        {
+                            case JobStatus.Applied:
+                                statusClass = "status-applied";
+                                break;
+                            case JobStatus.Rejected:
+                                statusClass = "status-rejected";
+                                break;
+                            case JobStatus.Accepted:
+                                statusClass = "status-accepted";
+                                break;
+                            default:
+                                statusClass = "";
+                                break;
+                        }
                         <tr>
                             <th scope="row">@job.Company</th>
                             <td>@job.Position</td>
                             <td>@job.Language</td>
                             <td>@job.Salary</td>
                             <td>@job.DateApplied.ToShortDateString()</td>
-                            <td>@job.Status</td>
+                            <td class="@statusClass">@job.Status</td>
                             <td>
-                                <a asp-controller="Home" asp-action="Edit" asp-route-id="@job.JobId" class="btn btn-info btn-sm">Edit</a>
-                                <a asp-controller="Home" asp-action="Delete" asp-route-id="@job.JobId" class="btn btn-danger btn-sm">Delete</a>
+                                <a asp-controller="Home" asp-action="Edit" asp-route-id="@job.JobId" class="btn btn-primary btn-sm">Edit</a>
+                                <a asp-controller="Home" asp-action="Delete" asp-route-id="@job.JobId" class="btn btn-primary btn-sm">Delete</a>
                             </td>
                         </tr>
                     }
