@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Web.DTO_s;
 using Web.Models;
 
 namespace Web.Data
@@ -90,6 +91,33 @@ namespace Web.Data
             var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.JobId == id && j.UserId == currentUserId);
 
             return job;
+        }
+
+        public async Task<IEnumerable<JobIndexDTO>> GetAllJobsIndexAsync(ClaimsPrincipal userId)
+        {
+            // Get currently logged in user's id
+            var currentUserId = _userManager.GetUserId(userId);
+
+            IQueryable<Job> query = GetAllJobsQuery(userId);
+
+            return await query
+                .Select(j => new JobIndexDTO { Company = j.Company, DateApplied = j.DateApplied, JobId = j.JobId, Position = j.Position, Status = j.Status })
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// This is a helper method that allows the DB connection to stay on, and be used in other methods.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        private IQueryable<Job> GetAllJobsQuery(ClaimsPrincipal userId)
+        {
+            // Get currently logged in user's id
+            var currentUserId = _userManager.GetUserId(userId);
+
+            return _dbContext.Jobs
+                .Where(j => j.UserId == currentUserId)
+                .AsQueryable<Job>();
         }
     }
 }

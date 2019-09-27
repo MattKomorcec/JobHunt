@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Web.Data;
@@ -18,7 +17,8 @@ namespace Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var jobs = await _jobRepository.GetAllJobsAsync(User);
+            // var jobs = await _jobRepository.GetAllJobsAsync(User);
+            var jobs = await _jobRepository.GetAllJobsIndexAsync(User);
 
             return View(jobs);
         }
@@ -39,7 +39,7 @@ namespace Web.Controllers
 
             await _jobRepository.CreateJobAsync(job, User);
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -77,7 +77,7 @@ namespace Web.Controllers
 
             await _jobRepository.EditJobAsync(editedJob, User);
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -110,7 +110,13 @@ namespace Web.Controllers
 
             await _jobRepository.DeleteJobAsync(jobToDelete, User);
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

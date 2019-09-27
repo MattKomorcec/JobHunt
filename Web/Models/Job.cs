@@ -5,7 +5,7 @@ namespace Web.Models
 {
     public enum JobStatus
     {
-        Applied, Rejected, Accepted
+        Applied, Rejected, Accepted, Interviewing
     }
 
     public enum Language
