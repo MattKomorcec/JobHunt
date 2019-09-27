@@ -31,14 +31,9 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
                     @if (SignInManager.IsSignedIn(User))
                     {
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark btn btn-success btn-sm" asp-controller="Home" asp-action="Create">Add a job</a>
-                        </li>
-                    </ul>
+                        @await Html.PartialAsync("_LoginPartial")
                     }
                 </div>
             </div>
@@ -75,6 +70,7 @@
                 integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
         </script>
     </environment>
+    <script src="https://use.fontawesome.com/releases/v5.11.1/js/all.js" data-auto-replace-svg="nest"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)

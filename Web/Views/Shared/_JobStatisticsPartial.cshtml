@@ -1,0 +1,68 @@
+﻿@model List<Web.DTO_s.JobIndexDTO>
+
+<h1 class="display-4 text-center">Your Jobs</h1>
+<hr />
+<div class="text-center">
+    <a class="btn btn-outline-primary btn-sm col-lg-2 col-md-3" asp-controller="Home" asp-action="Create">Add a Job</a>
+</div>
+<hr />
+
+@{ 
+    int totalJobs = Model.Count;
+    int totalRejected = Model.FindAll(j => j.Status == JobStatus.Rejected).Count;
+    int totalAccepted = Model.FindAll(j => j.Status == JobStatus.Accepted).Count;
+    int totalInterviewing = Model.FindAll(j => j.Status == JobStatus.Interviewing).Count;
+
+    double interviewingAppliedPercent = ((double)totalInterviewing / totalJobs) * 100;
+    double rejectedAppliedPercent = ((double)totalRejected / totalJobs) * 100;
+}
+
+<dl class="row">
+    <dt class="col-md-3 col-sm-12">
+        <i class="far fa-paper-plane"></i>
+        Total Applied
+    </dt>
+    <dd class="col-md-1 col-sm-12">
+        @totalJobs
+    </dd>
+    <dt class="col-md-3 col-sm-12">
+        <i class="far fa-comments"></i>
+        Total Interviewing
+    </dt>
+    <dd class="col-md-1 col-sm-12">
+        @totalInterviewing
+    </dd>
+    <dt class="col-md-3 col-sm-12">
+        <i class="far fa-times-circle"></i>
+        Total Rejected
+    </dt>
+    <dd class="col-md-1 col-sm-12">
+        @totalRejected
+    </dd>
+</dl>
+
+<dl class="row">
+    <dt class="col-md-3 col-sm-12">
+        <i class="far fa-handshake"></i>
+        Total Accepted
+    </dt>
+    <dd class="col-md-1 col-sm-12">
+        @totalAccepted
+    </dd>
+    <dt class="col-md-3 col-sm-12">
+        <i class="fas fa-percent"></i>
+        Applied / Interviewing
+    </dt>
+    <dd class="col-md-1 col-sm-12">
+        @Math.Round(interviewingAppliedPercent, 2)%
+    </dd>
+    <dt class="col-md-3 col-sm-12">
+        <i class="fas fa-percent"></i>
+        Applied / Rejected
+    </dt>
+    <dd class="col-md-1 col-sm-12">
+        @Math.Round(rejectedAppliedPercent, 2)%
+    </dd>
+</dl>
+
+<hr />
