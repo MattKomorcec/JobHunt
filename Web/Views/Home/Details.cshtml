@@ -1,0 +1,79 @@
+﻿@model Web.Models.Job
+
+@{
+    ViewData["Title"] = "View details about a Job";
+}
+
+<h3><u>Viewing</u> @Model.Position at @Model.Company</h3>
+
+<div>
+    <h4>Job</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Company)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Company)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateApplied)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateApplied)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Language)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Language)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Position)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salary)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salary)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Link)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Link)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Benefits)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Benefits)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.JobId" class="btn btn-warning">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.JobId" class="btn btn-danger">Delete</a>
+    <a asp-action="Index" class="btn btn-info">Back</a>
+</div>

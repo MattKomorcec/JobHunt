@@ -14,6 +14,9 @@
     {
         <h1 class="display-4 text-center">You have no jobs yet!</h1>
         <hr />
+        <div class="text-center">
+            <a class="btn btn-outline-primary btn-sm col-lg-2 col-md-3" asp-controller="Home" asp-action="Create">Add a Job</a>
+        </div>
     }
     else
     {
@@ -42,7 +45,7 @@
                             <td>@job.DateApplied.ToShortDateString()</td>
                             <td>@job.Status</td>
                             <td class="action-buttons-holder">
-                                <a asp-controller="Home" asp-action="Details" asp-route-id="@job.JobId" class="action-buttons text-hide">
+                                <a asp-controller="Home" asp-action="Details" asp-route-id="@job.JobId" class="action-buttons">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a asp-controller="Home" asp-action="Edit" asp-route-id="@job.JobId" class="action-buttons">

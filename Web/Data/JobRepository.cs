@@ -79,6 +79,7 @@ namespace Web.Data
             var currentUserId = _userManager.GetUserId(userId);
 
             return await _dbContext.Jobs
+                .AsNoTracking()
                 .Where(j => j.UserId == currentUserId)
                 .ToListAsync();
         }
@@ -88,7 +89,9 @@ namespace Web.Data
             // Get currently logged in user's id
             var currentUserId = _userManager.GetUserId(userId);
 
-            var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.JobId == id && j.UserId == currentUserId);
+            var job = await _dbContext.Jobs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(j => j.JobId == id && j.UserId == currentUserId);
 
             return job;
         }
@@ -101,7 +104,14 @@ namespace Web.Data
             IQueryable<Job> query = GetAllJobsQuery(userId);
 
             return await query
-                .Select(j => new JobIndexDTO { Company = j.Company, DateApplied = j.DateApplied, JobId = j.JobId, Position = j.Position, Status = j.Status })
+                .Select(j => new JobIndexDTO
+                {
+                    Company = j.Company,
+                    DateApplied = j.DateApplied,
+                    JobId = j.JobId,
+                    Position = j.Position,
+                    Status = j.Status
+                })
                 .ToListAsync();
         }
 
@@ -116,6 +126,7 @@ namespace Web.Data
             var currentUserId = _userManager.GetUserId(userId);
 
             return _dbContext.Jobs
+                .AsNoTracking()
                 .Where(j => j.UserId == currentUserId)
                 .AsQueryable<Job>();
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Web.Data;
@@ -6,6 +7,7 @@ using Web.Models;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IJobRepository _jobRepository;
@@ -15,9 +17,9 @@ namespace Web.Controllers
             _jobRepository = jobRepository;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            // var jobs = await _jobRepository.GetAllJobsAsync(User);
             var jobs = await _jobRepository.GetAllJobsIndexAsync(User);
 
             return View(jobs);
@@ -114,9 +116,21 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var job = await _jobRepository.GetJobAsync(id, User);
+
+            if (job == null)
+            {
+                return NotFound("Job not found!");
+            }
+
+            return View(job);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
