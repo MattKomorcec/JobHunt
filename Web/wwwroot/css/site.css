@@ -69,3 +69,20 @@ body {
 .action-buttons:visited {
     text-decoration: none;
 }
+
+.search-job-holder {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+    .search-job-holder .search-input {
+        width: 65%;
+    }
+
+.pagination-btns-holder {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

@@ -5,10 +5,9 @@
 }
 
 <h3><u>Viewing</u> @Model.Position at @Model.Company</h3>
+<hr />
 
 <div>
-    <h4>Job</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Company)
@@ -73,7 +72,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.JobId" class="btn btn-warning">Edit</a>
+    <a asp-action="Edit" asp-route-id="@Model.JobId" class="btn btn-primary">Edit</a>
     <a asp-action="Delete" asp-route-id="@Model.JobId" class="btn btn-danger">Delete</a>
     <a asp-action="Index" class="btn btn-info">Back</a>
 </div>

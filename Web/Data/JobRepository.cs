@@ -79,7 +79,6 @@ namespace Web.Data
             var currentUserId = _userManager.GetUserId(userId);
 
             return await _dbContext.Jobs
-                .AsNoTracking()
                 .Where(j => j.UserId == currentUserId)
                 .ToListAsync();
         }
@@ -96,14 +95,22 @@ namespace Web.Data
             return job;
         }
 
-        public async Task<IEnumerable<JobIndexDTO>> GetAllJobsIndexAsync(ClaimsPrincipal userId)
+        /// <summary>
+        /// This method returns all the jobs for the logged in user, sorted by provided sortOrder.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <param name="sortOrder"></param>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
+        public IQueryable<JobIndexDTO> GetAllJobsIndexAsync(ClaimsPrincipal userId, string sortOrder, string searchString)
         {
             // Get currently logged in user's id
             var currentUserId = _userManager.GetUserId(userId);
 
-            IQueryable<Job> query = GetAllJobsQuery(userId);
-
-            return await query
+            // Get the query for all jobs, and map it to JobIndexDTO
+            var query = _dbContext.Jobs
+                .Where(j => j.UserId == currentUserId)
                 .Select(j => new JobIndexDTO
                 {
                     Company = j.Company,
@@ -111,8 +118,45 @@ namespace Web.Data
                     JobId = j.JobId,
                     Position = j.Position,
                     Status = j.Status
-                })
-                .ToListAsync();
+                });
+
+            // If a user searched for a job using search
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(j => j.Company.Contains(searchString) || j.Position.Contains(searchString));
+            }
+
+            // Depending on the sortOrder, order the jobs
+            switch (sortOrder)
+            {
+                default:
+                case "date":
+                    query = query.OrderBy(j => j.DateApplied);
+                    break;
+                case "date_desc":
+                    query = query.OrderByDescending(j => j.DateApplied);
+                    break;
+                case "position":
+                    query = query.OrderBy(j => j.Position);
+                    break;
+                case "position_desc":
+                    query = query.OrderByDescending(j => j.Position);
+                    break;
+                case "company":
+                    query = query.OrderBy(j => j.Company);
+                    break;
+                case "company_desc":
+                    query = query.OrderByDescending(j => j.Company);
+                    break;
+                case "status":
+                    query = query.OrderBy(j => j.Status);
+                    break;
+                case "status_desc":
+                    query = query.OrderByDescending(j => j.Status);
+                    break;
+            }
+
+            return query.AsNoTracking();
         }
 
         /// <summary>
@@ -126,9 +170,8 @@ namespace Web.Data
             var currentUserId = _userManager.GetUserId(userId);
 
             return _dbContext.Jobs
-                .AsNoTracking()
                 .Where(j => j.UserId == currentUserId)
-                .AsQueryable<Job>();
+                .AsQueryable();
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Web.Data;
+using Web.DTO_s;
+using Web.Helpers;
 using Web.Models;
 
 namespace Web.Controllers
@@ -18,11 +21,31 @@ namespace Web.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            var jobs = await _jobRepository.GetAllJobsIndexAsync(User);
+            var jobs = _jobRepository.GetAllJobsIndexAsync(User, sortOrder, searchString);
 
-            return View(jobs);
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["DateSortParam"] = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewData["CompanySortParam"] = sortOrder == "company" ? "company_desc" : "company";
+            ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
+            ViewData["PositionSortParam"] = sortOrder == "position" ? "position_desc" : "position";
+            ViewData["CurrentFilter"] = searchString;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            int pageSize = 10;
+
+            return View(await PaginatedList<JobIndexDTO>.CreateAsync(jobs.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         [HttpGet]

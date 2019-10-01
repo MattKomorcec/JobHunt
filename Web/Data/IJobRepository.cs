@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Web.DTO_s;
@@ -10,7 +11,7 @@ namespace Web.Data
     {
         Task<List<Job>> GetAllJobsAsync(ClaimsPrincipal userId);
 
-        Task<IEnumerable<JobIndexDTO>> GetAllJobsIndexAsync(ClaimsPrincipal userId);
+        IQueryable<JobIndexDTO> GetAllJobsIndexAsync(ClaimsPrincipal userId, string sortOrder, string searchString);
 
         Task<Job> GetJobAsync(int id, ClaimsPrincipal userId);
 

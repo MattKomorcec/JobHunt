@@ -5,8 +5,8 @@
 }
 
 <h3><u>Editing</u> @Model.Position at @Model.Company</h3>
-
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -68,6 +68,7 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Details" asp-route-id="@Model.JobId" class="btn btn-secondary">Details</a>
                 <a asp-action="Index" class="btn btn-info">Back</a>
             </div>
         </form>

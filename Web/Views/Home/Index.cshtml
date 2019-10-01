@@ -1,10 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-@model List<Web.DTO_s.JobIndexDTO>
+@model PaginatedList<Web.DTO_s.JobIndexDTO>
 
 @{
     ViewData["Title"] = "All Jobs";
+
 }
 
 
@@ -21,15 +22,45 @@
     else
     {
         @await Html.PartialAsync("_JobStatisticsPartial", Model)
+        <div>
+            <form asp-action="Index" method="get">
+                <div class="form-group search-job-holder">
+                    <h6>Search for a Job: </h6>
+                    <input type="text" name="SearchString" value="@ViewData["currentFilter"]" class="form-control search-input" />
+                    <button type="submit" class="btn btn-default">Search <i class="fas fa-search"></i></button>
+                    <a asp-action="Index">
+                        Reset <i class="fas fa-redo"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
 
         <div class="table-responsive">
             <table class="table text-center table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Company</th>
-                        <th scope="col">Position</th>
-                        <th scope="col">Date applied</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["CompanySortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Company</a>
+                        </th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["PositionSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Position</a>
+                        </th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                Date Applied
+                                @if (ViewData["DateSortParam"].ToString() == "date_desc")
+                                {
+                                    <i class="fas fa-sort-amount-up-alt"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-sort-amount-down"></i>
+                                }
+                            </a>
+                        </th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
+                        </th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -40,7 +71,11 @@
 
 
                         <tr class="@jobStatus">
-                            <th scope="row">@job.Company</th>
+                            <th scope="row">
+                                <a asp-controller="Home" asp-action="Details" asp-route-id="@job.JobId" class="action-buttons">
+                                    @job.Company
+                                </a>
+                            </th>
                             <td>@job.Position</td>
                             <td>@job.DateApplied.ToShortDateString()</td>
                             <td>@job.Status</td>
@@ -60,6 +95,8 @@
                 </tbody>
             </table>
         </div>
+
+        @await Html.PartialAsync("_PaginationPartial", Model)
     }
 
 }
