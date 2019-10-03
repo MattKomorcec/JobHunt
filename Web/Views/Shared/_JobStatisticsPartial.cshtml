@@ -1,4 +1,4 @@
-﻿@model List<Web.DTO_s.JobIndexDTO>
+﻿@model PaginatedList<Web.DTO_s.JobIndexDTO>
 
 <h1 class="display-4 text-center">Your Jobs</h1>
 <hr />
@@ -7,14 +7,14 @@
 </div>
 <hr />
 
-@{ 
-    int totalJobs = Model.Count;
-    int totalRejected = Model.FindAll(j => j.Status == JobStatus.Rejected).Count;
-    int totalAccepted = Model.FindAll(j => j.Status == JobStatus.Accepted).Count;
-    int totalInterviewing = Model.FindAll(j => j.Status == JobStatus.Interviewing).Count;
+@{
+    int totalJobs = Model.TotalJobs;
+    int totalRejected = Model.TotalRejected;
+    int totalAccepted = Model.TotalAccepted;
+    int totalInterviewing = Model.TotalInterviewing;
 
-    double interviewingAppliedPercent = ((double)totalInterviewing / totalJobs) * 100;
-    double rejectedAppliedPercent = ((double)totalRejected / totalJobs) * 100;
+    double interviewingAppliedPercent = totalInterviewing > 0 && totalJobs > 0 ? ((double)totalInterviewing / totalJobs) * 100 : 0;
+    double rejectedAppliedPercent = totalRejected > 0 && totalJobs > 0 ? ((double)totalRejected / totalJobs) * 100 : 0;
 }
 
 <dl class="row">

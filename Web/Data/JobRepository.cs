@@ -164,7 +164,7 @@ namespace Web.Data
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        private IQueryable<Job> GetAllJobsQuery(ClaimsPrincipal userId)
+        public IQueryable<Job> GetAllJobsQuery(ClaimsPrincipal userId)
         {
             // Get currently logged in user's id
             var currentUserId = _userManager.GetUserId(userId);

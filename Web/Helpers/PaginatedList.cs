@@ -11,11 +11,15 @@ namespace Web.Helpers
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
 
+        public int TotalJobs { get; set; }
+        public int TotalAccepted { get; set; }
+        public int TotalRejected { get; set;}
+        public int TotalInterviewing { get; set; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            TotalPages = (int)Math.Ceiling(TotalJobs / (double)pageSize);
 
             this.AddRange(items);
         }

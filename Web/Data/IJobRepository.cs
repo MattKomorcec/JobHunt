@@ -13,6 +13,8 @@ namespace Web.Data
 
         IQueryable<JobIndexDTO> GetAllJobsIndexAsync(ClaimsPrincipal userId, string sortOrder, string searchString);
 
+        IQueryable<Job> GetAllJobsQuery(ClaimsPrincipal userId);
+
         Task<Job> GetJobAsync(int id, ClaimsPrincipal userId);
 
         Task CreateJobAsync(Job job, ClaimsPrincipal userId);

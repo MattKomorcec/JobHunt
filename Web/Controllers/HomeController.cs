@@ -24,6 +24,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             var jobs = _jobRepository.GetAllJobsIndexAsync(User, sortOrder, searchString);
+            var allJobs = await _jobRepository.GetAllJobsQuery(User).ToListAsync();
 
             ViewData["CurrentSort"] = sortOrder;
             ViewData["DateSortParam"] = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
@@ -44,8 +45,13 @@ namespace Web.Controllers
             ViewData["CurrentFilter"] = searchString;
 
             int pageSize = 10;
+            var paginatedJobs = await PaginatedList<JobIndexDTO>.CreateAsync(jobs.AsNoTracking(), pageNumber ?? 1, pageSize);
+            paginatedJobs.TotalJobs = allJobs.Count;
+            paginatedJobs.TotalRejected = allJobs.FindAll(j => j.Status == JobStatus.Rejected).Count;
+            paginatedJobs.TotalAccepted = allJobs.FindAll(j => j.Status == JobStatus.Accepted).Count;
+            paginatedJobs.TotalInterviewing = allJobs.FindAll(j => j.Status == JobStatus.Interviewing).Count;
 
-            return View(await PaginatedList<JobIndexDTO>.CreateAsync(jobs.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(paginatedJobs);
         }
 
         [HttpGet]
@@ -163,6 +169,11 @@ namespace Web.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult About()
         {
             return View();
         }
