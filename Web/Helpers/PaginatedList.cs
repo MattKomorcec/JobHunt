@@ -13,13 +13,13 @@ namespace Web.Helpers
 
         public int TotalJobs { get; set; }
         public int TotalAccepted { get; set; }
-        public int TotalRejected { get; set;}
+        public int TotalRejected { get; set; }
         public int TotalInterviewing { get; set; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(TotalJobs / (double)pageSize);
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
             this.AddRange(items);
         }
@@ -28,7 +28,7 @@ namespace Web.Helpers
         {
             get
             {
-                return (PageIndex > 1);
+                return PageIndex > 1;
             }
         }
 
@@ -36,7 +36,7 @@ namespace Web.Helpers
         {
             get
             {
-                return (PageIndex < TotalPages);
+                return PageIndex < TotalPages;
             }
         }
 

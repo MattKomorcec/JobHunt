@@ -1,27 +1,27 @@
 ﻿@model PaginatedList<Web.DTO_s.JobIndexDTO>
 
-    @{
-        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+@{
+    var prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+    var nextDisabled = Model.HasNextPage ? "" : "disabled";
 
-        if (Model.TotalPages > 1)
-        {
-            <hr />
-            <div class="pagination-btns-holder">
-                <a asp-action="Index"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-pageNumber="@(Model.PageIndex - 1)"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   class="btn btn-info btn-sm @prevDisabled">
-                    <i class="fas fa-arrow-left"></i> Previous
-                </a>
-                <a asp-action="Index"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-pageNumber="@(Model.PageIndex + 1)"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   class="btn btn-info btn-sm @nextDisabled">
-                    Next <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        }
+    if (Model.TotalPages > 1)
+    {
+        <hr />
+        <div class="pagination-btns-holder">
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-info btn-sm @prevDisabled">
+                <i class="fas fa-arrow-left"></i> Previous
+            </a>
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-info btn-sm @nextDisabled">
+                Next <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
     }
+}
