@@ -10,7 +10,6 @@ namespace Web.Helpers
     {
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
-
         public int TotalJobs { get; set; }
         public int TotalAccepted { get; set; }
         public int TotalRejected { get; set; }
