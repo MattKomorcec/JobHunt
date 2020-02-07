@@ -173,6 +173,7 @@ namespace Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult About()
         {
             return View();
