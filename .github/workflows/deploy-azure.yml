@@ -28,7 +28,7 @@ jobs:
       run: dotnet build ./JobHunt.sln --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publis ./JobHunt.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+      run: dotnet publish ./JobHunt.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
     - name: Deploy to Azure
       uses: azure/webapps-deploy@v2
