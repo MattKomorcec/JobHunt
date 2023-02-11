@@ -1,24 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using Web.Configuration;
+using Web.Data;
+using Web.Models;
 
-namespace Web
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.ConfigureIdentity();
+
+builder.Services.ConfigureCookiePolicyOptions();
+
+builder.Services.ConfigureCookies();
+
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+
+builder.Services.AddMvc(options =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateWebHostBuilder(args).Build().Run();
-        }
+    options.EnableEndpointRouting = false;
+});
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
-    }
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseMvc(routes =>
+{
+    routes.MapRoute(
+        name: "default",
+        template: "{controller=Home}/{action=Index}/{id?}");
+});
+
+app.Run();

@@ -5,6 +5,16 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{E981C58C-B53F-46CF-8A38-10DA484CEABF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{617640C1-887E-4E64-BCE9-4C8B4722A5CC}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-web.yml = .github\workflows\build-web.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{3595F625-7507-4AF7-A8B9-7BA549A7DE76}"
+	ProjectSection(SolutionItems) = preProject
+		build-web.yml = build-web.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,5 +31,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {68157B62-B24B-49DA-AC45-EBB5370440D4}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3595F625-7507-4AF7-A8B9-7BA549A7DE76} = {617640C1-887E-4E64-BCE9-4C8B4722A5CC}
 	EndGlobalSection
 EndGlobal

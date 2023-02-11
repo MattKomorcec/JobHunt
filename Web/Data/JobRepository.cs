@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Web.DTO_s;
+using Web.DTOs;
 using Web.Models;
 
 namespace Web.Data
@@ -21,18 +22,16 @@ namespace Web.Data
             _userManager = userManager;
         }
 
-        public async Task CreateJobAsync(Job job, ClaimsPrincipal userId)
+        public async Task CreateJobAsync(JobDto jobDto, ClaimsPrincipal user)
         {
             // Get currently logged in user's id
-            var currentUserId = _userManager.GetUserId(userId);
+            var userId = _userManager.GetUserId(user);
 
-            job.UserId = currentUserId;
+            var job = (Job)jobDto;
 
-            // If a user didn't select a date, set it to today's date
-            if (job.DateApplied == null)
-            {
-                job.DateApplied = DateTime.Now;
-            }
+            job.DateApplied = DateTime.SpecifyKind(job.DateApplied, DateTimeKind.Utc);
+
+            job.UserId = userId!;
 
             // Add a job and save it to the DB
             _dbContext.Add<Job>(job);
@@ -83,7 +82,7 @@ namespace Web.Data
                 .ToListAsync();
         }
 
-        public async Task<Job> GetJobAsync(int id, ClaimsPrincipal userId)
+        public async Task<Job?> GetJobAsync(int id, ClaimsPrincipal userId)
         {
             // Get currently logged in user's id
             var currentUserId = _userManager.GetUserId(userId);
@@ -103,7 +102,7 @@ namespace Web.Data
         /// <param name="sortOrder"></param>
         /// <param name="searchString"></param>
         /// <returns></returns>
-        public IQueryable<JobIndexDTO> GetAllJobsIndexAsync(ClaimsPrincipal userId, string sortOrder, string searchString)
+        public (IQueryable<JobIndexDTO>, int) GetAllJobsIndexAsync(ClaimsPrincipal userId, string sortOrder, string searchString)
         {
             // Get currently logged in user's id
             var currentUserId = _userManager.GetUserId(userId);
@@ -156,7 +155,11 @@ namespace Web.Data
                     break;
             }
 
-            return query.AsNoTracking();
+            var count = query.CountAsync().GetAwaiter().GetResult();
+
+            System.Console.WriteLine($"Count is: {count}");
+
+            return (query, count);
         }
 
         /// <summary>

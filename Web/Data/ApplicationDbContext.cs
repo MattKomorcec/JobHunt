@@ -1,7 +1,6 @@
-﻿using Web.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Web.Models;
 
 namespace Web.Data
 {

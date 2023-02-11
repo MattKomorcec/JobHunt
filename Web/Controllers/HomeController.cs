@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Web.Data;
 using Web.DTO_s;
+using Web.DTOs;
 using Web.Helpers;
 using Web.Models;
 
@@ -20,10 +22,9 @@ namespace Web.Controllers
             _jobRepository = jobRepository;
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            var jobs = _jobRepository.GetAllJobsIndexAsync(User, sortOrder, searchString);
+            var (jobs, count) = _jobRepository.GetAllJobsIndexAsync(User, sortOrder, searchString);
             var allJobs = await _jobRepository.GetAllJobsQuery(User).ToListAsync();
 
             ViewData["CurrentSort"] = sortOrder;
@@ -45,7 +46,7 @@ namespace Web.Controllers
             ViewData["CurrentFilter"] = searchString;
 
             int pageSize = 10;
-            var paginatedJobs = await PaginatedList<JobIndexDTO>.CreateAsync(jobs.AsNoTracking(), pageNumber ?? 1, pageSize);
+            var paginatedJobs = PaginatedList<JobIndexDTO>.CreateAsync(await jobs.ToListAsync(), count, pageNumber ?? 1, pageSize);
             paginatedJobs.TotalJobs = allJobs.Count;
             paginatedJobs.TotalRejected = allJobs.FindAll(j => j.Status == JobStatus.Rejected).Count;
             paginatedJobs.TotalAccepted = allJobs.FindAll(j => j.Status == JobStatus.Accepted).Count;
@@ -61,9 +62,9 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Job job)
+        public async Task<IActionResult> Create(JobDto job)
         {
-            if (!ModelState.IsValid)
+            if (!User.Identity.IsAuthenticated || !ModelState.IsValid)
             {
                 return BadRequest();
             }
