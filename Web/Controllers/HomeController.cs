@@ -22,6 +22,7 @@ namespace Web.Controllers
             _jobRepository = jobRepository;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             var (jobs, count) = _jobRepository.GetAllJobsIndexAsync(User, sortOrder, searchString);
