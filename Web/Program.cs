@@ -9,6 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+var envVariables = Environment.GetEnvironmentVariables();
+
+if (envVariables is not null)
+{
+    foreach (var kvp in (Dictionary<string, string>)envVariables)
+    {
+        Console.WriteLine($"Key: {kvp.Key}, value: {kvp.Value}");
+    }
+}
+
 Console.WriteLine($"Got the connection string: {connectionString}");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
