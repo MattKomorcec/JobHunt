@@ -20,6 +20,8 @@ jobs:
         dotnet-version: '7.0.x'
     - name: Build with dotnet
       run: dotnet build --configuration Release
+    - name: Install Azure CLI
+      uses: azure/cli@v1
     - name: Login to Azure
       uses: azure/login@v1
       with:
