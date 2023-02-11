@@ -7,8 +7,15 @@ using Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = Environment.GetEnvironmentVariable("AZURE_POSTGRESQL_CONNECTIONSTRING");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(connectionString));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
