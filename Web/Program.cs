@@ -7,16 +7,11 @@ using Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DefaultConnection");
 
-var envVariables = Environment.GetEnvironmentVariables();
-
-if (envVariables is not null)
+if (string.IsNullOrEmpty(connectionString))
 {
-    foreach (var kvp in (Dictionary<string, string>)envVariables)
-    {
-        Console.WriteLine($"Key: {kvp.Key}, value: {kvp.Value}");
-    }
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 }
 
 Console.WriteLine($"Got the connection string: {connectionString}");
