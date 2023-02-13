@@ -9,7 +9,7 @@ using Web.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Load the Nlog configuration file
-LogManager.LoadConfiguration(Path.Combine(Directory.GetCurrentDirectory(), "/nlog.config"));
+LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 var connectionString = Database.GetConnectionString(builder.Configuration);
 

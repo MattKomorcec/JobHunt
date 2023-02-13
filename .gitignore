@@ -341,3 +341,4 @@ healthchecksdb
 
 .DS_Store
 .vscode/
+Web/.\\internal_logs\\internallog.txt
