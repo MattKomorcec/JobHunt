@@ -16,7 +16,7 @@ namespace Web.Data
 
         IQueryable<Job> GetAllJobsQuery(ClaimsPrincipal userId);
 
-        Task<Job> GetJobAsync(int id, ClaimsPrincipal userId);
+        Task<Job?> GetJobAsync(int id, ClaimsPrincipal userId);
 
         Task CreateJobAsync(JobDto job, ClaimsPrincipal userId);
 

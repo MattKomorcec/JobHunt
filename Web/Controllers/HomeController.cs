@@ -65,7 +65,7 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(JobDto job)
         {
-            if (!User.Identity.IsAuthenticated || !ModelState.IsValid)
+            if (User.Identity is null || !User.Identity.IsAuthenticated || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -105,7 +105,7 @@ namespace Web.Controllers
 
             if (job == null)
             {
-                return NotFound("Somehow this job doesn't exist!");
+                return NotFound("Job not found!");
             }
 
             await _jobRepository.EditJobAsync(editedJob, User);

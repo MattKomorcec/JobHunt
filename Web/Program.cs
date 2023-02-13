@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
 using Web.Configuration;
 using Web.Data;
 using Web.Models;
@@ -23,9 +21,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.ConfigureIdentity();
-
 builder.Services.ConfigureCookiePolicyOptions();
-
 builder.Services.ConfigureCookies();
 
 builder.Services.AddScoped<IJobRepository, JobRepository>();
@@ -39,10 +35,10 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
 }
 else
 {
+    app.UseDeveloperExceptionPage();
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }

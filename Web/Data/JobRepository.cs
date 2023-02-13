@@ -45,6 +45,11 @@ namespace Web.Data
 
             var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.JobId == jobToDelete.JobId && j.UserId == currentUserId);
 
+            if (job is null)
+            {
+                return;
+            }
+
             _dbContext.Jobs.Remove(job);
             await _dbContext.SaveChangesAsync();
         }
@@ -55,6 +60,11 @@ namespace Web.Data
             var currentUserId = _userManager.GetUserId(userId);
 
             var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.JobId == editedJob.JobId && j.UserId == currentUserId);
+
+            if (job is null)
+            {
+                return;
+            }
 
             // Map all the fields to the existing job
             job.Company = editedJob.Company;

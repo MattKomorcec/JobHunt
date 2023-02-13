@@ -33,7 +33,7 @@
             </form>
         </div>
 
-        @if (ViewData["CurrentFilter"] != null && !String.IsNullOrEmpty(ViewData["CurrentFilter"].ToString()) && Model.Count == 0)
+        @if (ViewData["CurrentFilter"] != null && !String.IsNullOrEmpty(ViewData["CurrentFilter"]!.ToString()) && Model.Count == 0)
         {
             <div class="alert alert-danger" role="alert">
                 No jobs found for that search.
@@ -54,7 +54,7 @@
                             <th scope="col">
                                 <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                     Date Applied
-                                    @if (ViewData["DateSortParam"].ToString() == "date_desc")
+                                    @if (ViewData["DateSortParam"] != null && ViewData["DateSortParam"]!.ToString() == "date_desc")
                                     {
                                         <i class="fas fa-sort-amount-up-alt"></i>
                                     }

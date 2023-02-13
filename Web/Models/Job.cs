@@ -29,9 +29,9 @@ public class Job
     public int JobId { get; set; }
 
     [Required]
-    public string Company { get; set; }
+    public string Company { get; set; } = string.Empty;
 
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     [Required]
     [Display(Name = "Date applied")]
@@ -42,15 +42,15 @@ public class Job
 
     public Language Language { get; set; }
 
-    public string Position { get; set; }
+    public string Position { get; set; } = string.Empty;
 
     public int Salary { get; set; }
 
-    public string Link { get; set; }
+    public string Link { get; set; } = string.Empty;
 
-    public string Location { get; set; }
+    public string Location { get; set; } = string.Empty;
 
-    public string Benefits { get; set; }
+    public string Benefits { get; set; } = string.Empty;
 
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 }
