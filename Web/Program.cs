@@ -1,18 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Contracts;
+using LoggerService;
+using Microsoft.EntityFrameworkCore;
+using NLog;
 using Web.Configuration;
 using Web.Data;
 using Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AZURE_POSTGRESQL_CONNECTIONSTRING");
+// Load the Nlog configuration file
+LogManager.LoadConfiguration(Path.Combine(Directory.GetCurrentDirectory(), "/nlog.config"));
 
-if (string.IsNullOrEmpty(connectionString))
-{
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-}
-
-Console.WriteLine($"Got the connection string: {connectionString}");
+var connectionString = Database.GetConnectionString(builder.Configuration);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
@@ -24,7 +23,9 @@ builder.Services.ConfigureIdentity();
 builder.Services.ConfigureCookiePolicyOptions();
 builder.Services.ConfigureCookies();
 
+// Add needed services
 builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 
 builder.Services.AddMvc(options =>
 {
@@ -35,10 +36,10 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
 }
 else
 {
-    app.UseDeveloperExceptionPage();
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }

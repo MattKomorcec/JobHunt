@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="NLog.Extensions.Logging" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
+  </ItemGroup>
+</Project>
